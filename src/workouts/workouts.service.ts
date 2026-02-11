@@ -3,6 +3,7 @@ import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WorkoutStatus } from '@prisma/client';
+import { addExerciseToWorkoutDto } from './dto/add-exercise-workout.dto';
 
 @Injectable()
 export class WorkoutsService {
@@ -29,8 +30,66 @@ export class WorkoutsService {
     return workout;
   }
 
-  findAll() {
-    return `This action returns all workouts`;
+  async addExercise(workoutId: string, dto: addExerciseToWorkoutDto) {
+    return this.prisma.workoutExercise.create({
+      data: {
+        ...dto,
+        workoutId,
+      },
+      include: { exercise: true },
+    });
+  }
+
+  async completExercise(id: string, comment?: string) {
+    const updated = await this.prisma.workoutExercise.update({
+      where: { id },
+      data: { completed: true, comment },
+    });
+
+    const remaning = await this.prisma.workoutExercise.count({
+      where: { workoutId: updated.workoutId, completed: false },
+    });
+
+    if (remaning === 0) {
+      await this.prisma.workouts.update({
+        where: { id: updated.workoutId },
+        data: { status: 'COMPLETE' },
+      });
+    }
+
+    return updated;
+  }
+
+  async getAllWorkout(
+    page: number,
+    limit: number,
+    sort: 'asc' | 'desc' = 'desc',
+  ) {
+    const currentPage = Math.max(page, 1);
+    const currentLimit = Math.max(limit, 1);
+    const skip = (currentPage - 1) * currentLimit;
+
+    const [total, workouts] = await this.prisma.$transaction([
+      this.prisma.workouts.count(),
+      this.prisma.workouts.findMany({
+        skip,
+        take: currentLimit,
+        orderBy: { createdAt: sort },
+      }),
+    ]);
+
+    return {
+      data: workouts,
+      meta: {
+        total,
+        page: currentPage,
+        limit: currentLimit,
+        totalPage: Math.ceil(total / currentLimit),
+        hasNextPage: currentPage < Math.ceil(total / currentLimit),
+        hasPrevPage: currentPage,
+        sort,
+      },
+    };
   }
 
   findOne(id: number) {

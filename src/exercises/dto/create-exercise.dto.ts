@@ -6,10 +6,10 @@ export class CreateExerciseDto {
   name: string;
 
   @IsString()
-  @IsOptional()
-  description?: string;
-
-  @IsString()
   @IsNotEmpty()
   muscleGroup: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
 }

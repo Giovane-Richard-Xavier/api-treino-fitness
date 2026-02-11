@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
@@ -13,8 +23,11 @@ export class WorkoutsController {
   }
 
   @Get()
-  findAll() {
-    return this.workoutsService.findAll();
+  getAllWorkout(
+    @Query('page', new ParseIntPipe()) page = 1,
+    @Query('limit', new ParseIntPipe()) limit = 10,
+  ) {
+    return this.workoutsService.getAllWorkout(page, limit);
   }
 
   @Get(':id')
