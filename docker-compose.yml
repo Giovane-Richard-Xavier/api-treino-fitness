@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+    container_name: treino-fitness_app
+    entrypoint: /home/node/app/.docker/entrypoint.sh
+    networks:
+      - main-network
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/home/node/app:delegated # seu código fonte para desenvolvimento
+      - node_modules_app:/home/node/app/node_modules # volume separado para dependencies
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/treino_fitness_db?schema=public
+  db:
+    build: .docker/postgres
+    container_name: treino_fitness_db
+    restart: always
+    tty: true
+    ports:
+      - '5432:5432'
+    volumes:
+      - .docker/dbdata:/var/lib/postgresql/data
+    networks:
+      - main-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: treino_fitness_db
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: treino_fitness_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '15432:80'
+    depends_on:
+      - db
+    networks:
+      - main-network
+    restart: unless-stopped
+
+volumes:
+  node_modules_app:
+  db-data:
+
+networks:
+  main-network:

@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum WorkoutStatus {
+  PENDING
+  COMPLETE
+  SKIPPED
+}
+
+model Users {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  workouts  Workouts[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Exercises {
+  id               String            @id @default(uuid())
+  name             String
+  description      String?           @db.Text
+  muscleGroup      String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  workoutExercises WorkoutExercise[]
+}
+
+model Workouts {
+  id        String            @id @default(uuid())
+  date      DateTime
+  notes     String?           @db.Text
+  status    WorkoutStatus     @default(PENDING)
+  exercises WorkoutExercise[]
+  userId    String
+  user      Users             @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkoutExercise {
+  id     String @id @default(uuid())
+  sets   Int
+  reps   Int
+  weight Float?
+
+  completed Boolean @default(false)
+  comment   String? @db.Text
+
+  workoutId String
+  workout   Workouts @relation(fields: [workoutId], references: [id])
+
+  exerciseId String
+  exercise   Exercises @relation(fields: [exerciseId], references: [id])
+}
