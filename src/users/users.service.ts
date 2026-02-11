@@ -34,8 +34,43 @@ export class UsersService {
     return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async getAllUsers(
+    page: number,
+    limit: number,
+    sort: 'asc' | 'desc' = 'desc',
+  ) {
+    const currentPage = Math.max(page, 1);
+    const currentLimit = Math.max(limit, 1);
+    const skip = (currentPage - 1) * currentLimit;
+
+    const [total, users] = await this.prisma.$transaction([
+      this.prisma.users.count(),
+      this.prisma.users.findMany({
+        skip,
+        take: currentLimit,
+        orderBy: { createdAt: sort },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+    ]);
+
+    return {
+      data: users,
+      meta: {
+        total,
+        page: currentPage,
+        limit: currentLimit,
+        totalPage: Math.ceil(total / currentLimit),
+        hasNextPage: currentPage < Math.ceil(total / currentLimit),
+        hasPrevPage: currentPage,
+        sort,
+      },
+    };
   }
 
   async getUserByEmail(email: string) {
