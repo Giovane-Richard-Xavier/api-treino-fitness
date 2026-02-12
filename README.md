@@ -294,6 +294,43 @@ Para que o cookie funcione corretamente em produção:
 
 ---
 
+---
+
+## ⚙️ CI/CD com GitHub Actions
+
+O projeto possui integração contínua (CI) configurada através do **GitHub Actions**, garantindo que o código seja validado automaticamente a cada Pull Request.
+
+### 🔄 O que é executado automaticamente
+
+Sempre que um PR é aberto, o pipeline executa:
+
+- Instalação de dependências
+- Build da aplicação
+- Verificação de integridade do projeto
+
+Isso garante que o código enviado esteja consistente antes de ser integrado.
+
+---
+
+### 📁 Arquivo de configuração
+
+O workflow está localizado em:
+
+```
+.github/workflows/ci.yml
+```
+
+---
+
+### 🧠 Benefícios
+
+- Evita quebrar o projeto principal  
+- Garante que o build está funcionando  
+- Base para adicionar testes automatizados no futuro  
+- Prática usada em projetos reais de mercado  
+
+---
+
 ## 🧪 Futuras melhorias
 
 - Testes unitários  
