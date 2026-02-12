@@ -102,11 +102,19 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.prisma.users.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`Not found user for ID: ${id}`);
+    }
+
+    await this.prisma.users.delete({ where: { id } });
+
+    return { message: 'User removed successfully!' };
   }
 }
