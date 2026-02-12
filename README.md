@@ -206,8 +206,6 @@ docker exec -it workout_manager_app bash
 
 ---
 
----
-
 ## 🔐 Autenticação Moderna com JWT via Cookies
 
 A aplicação utiliza autenticação baseada em **JWT armazenado em cookies HTTP-only**, ao invés de enviar o token manualmente via header `Authorization`.
@@ -294,8 +292,6 @@ Para que o cookie funcione corretamente em produção:
 
 ---
 
----
-
 ## ⚙️ CI/CD com GitHub Actions
 
 O projeto possui integração contínua (CI) configurada através do **GitHub Actions**, garantindo que o código seja validado automaticamente a cada Pull Request.
@@ -317,7 +313,7 @@ Isso garante que o código enviado esteja consistente antes de ser integrado.
 O workflow está localizado em:
 
 ```
-.github/workflows/ci.yml
+.github/workflows/workflow.yml
 ```
 
 ---
