@@ -52,6 +52,6 @@ export class WorkoutsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.workoutsService.remove(+id);
+    return this.workoutsService.remove(id);
   }
 }
