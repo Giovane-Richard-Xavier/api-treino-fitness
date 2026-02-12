@@ -12,7 +12,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async register(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.users.findUnique({
       where: { email: createUserDto.email },
     });
@@ -102,8 +102,42 @@ export class UsersService {
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.users.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`User not found for ID: ${id}`);
+    }
+
+    // Se estiver tentando trocar email
+    if (updateUserDto.email) {
+      const emailExists = await this.prisma.users.findUnique({
+        where: { email: updateUserDto.email },
+      });
+
+      if (emailExists) {
+        throw new ConflictException('Email is already in use');
+      }
+    }
+
+    // Se vier senha nova → criptografa
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
+    const updatedUser = await this.prisma.users.update({
+      where: { id },
+      data: updateUserDto,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedUser;
   }
 
   async remove(id: string) {
