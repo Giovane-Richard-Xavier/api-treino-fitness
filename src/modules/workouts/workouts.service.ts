@@ -97,15 +97,36 @@ export class WorkoutsService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} workout`;
+  async findOne(id: string) {
+    const workout = await this.prisma.workouts.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { name: true, email: true },
+        },
+      },
+    });
+
+    if (!workout) {
+      throw new NotFoundException(`Not found Workout with ID: ${id}`);
+    }
+
+    return workout;
   }
 
   update(id: number, updateWorkoutDto: UpdateWorkoutDto) {
     return `This action updates a #${id} workout`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} workout`;
+  async remove(id: string) {
+    const workout = await this.prisma.workouts.findUnique({ where: { id } });
+
+    if (!workout) {
+      throw new NotFoundException(`Not found Workout with ID: ${id}`);
+    }
+
+    await this.prisma.workouts.delete({ where: { id } });
+
+    return { message: 'Workout removed successfully!' };
   }
 }
