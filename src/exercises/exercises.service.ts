@@ -15,8 +15,36 @@ export class ExercisesService {
     return exercise;
   }
 
-  findAll() {
-    return `This action returns all exercises`;
+  async getAllExercises(
+    page: number,
+    limit: number,
+    sort: 'asc' | 'desc' = 'desc',
+  ) {
+    const currentPage = Math.max(page, 1);
+    const currentLimit = Math.max(limit, 1);
+    const skip = (currentPage - 1) * currentLimit;
+
+    const [total, exercises] = await this.prisma.$transaction([
+      this.prisma.exercises.count(),
+      this.prisma.exercises.findMany({
+        skip,
+        take: currentLimit,
+        orderBy: { createdAt: sort },
+      }),
+    ]);
+
+    return {
+      data: exercises,
+      meta: {
+        total,
+        page: currentPage,
+        limit: currentLimit,
+        totalPage: Math.ceil(total / currentLimit),
+        hasNextPage: currentPage < Math.ceil(total / currentLimit),
+        hasPrevPage: currentPage,
+        sort,
+      },
+    };
   }
 
   findOne(id: number) {

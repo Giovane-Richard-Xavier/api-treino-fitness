@@ -75,6 +75,11 @@ export class WorkoutsService {
         skip,
         take: currentLimit,
         orderBy: { createdAt: sort },
+        include: {
+          user: {
+            select: { name: true, email: true },
+          },
+        },
       }),
     ]);
 
