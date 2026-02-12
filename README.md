@@ -158,6 +158,7 @@ docker exec -it workout_manager_app bash
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | POST | `/auth/login` | Login do usuário |
+| POST | `/auth/logout` | Logout do usuário |
 
 ---
 
