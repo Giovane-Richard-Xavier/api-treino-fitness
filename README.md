@@ -1,98 +1,219 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🏋️ Workout Manager API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gerenciamento de treinos e exercícios, desenvolvida com foco em boas práticas de arquitetura, modelagem relacional profissional, validação de dados e organização de código com NestJS.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Tecnologias Utilizadas
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js  
+- NestJS  
+- Prisma ORM  
+- PostgreSQL  
+- Docker & Docker Compose  
+- Class Validator  
+- Bcrypt  
+- JWT  
+- TypeScript  
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## 🧠 Funcionalidades
 
-## Compile and run the project
+✔ Cadastro e login de usuários  
+✔ Autenticação segura com JWT  
+✔ Criptografia de senha  
+✔ CRUD de Exercícios (catálogo)  
+✔ CRUD de Treinos  
+✔ Adicionar exercícios a um treino  
+✔ Definir séries, repetições e carga  
+✔ Marcar exercício como concluído  
+✔ Atualização automática do status do treino  
+✔ Relacionamento N:N com dados extras (WorkoutExercise)  
+✔ Validação de DTOs  
+✔ Estrutura modular seguindo padrão do NestJS  
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## 🏗️ Arquitetura
 
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+O projeto segue arquitetura modular por domínio:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+src/
+ ├── modules
+ │   ├── auth
+ │   ├── users
+ │   ├── workouts
+ │   ├── exercises
+ │   └── workout-exercises
+ ├── prisma
+ └── main.ts
 ```
 
-## Deployment
+**Princípios aplicados**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- Separação por domínio  
+- Services responsáveis por regra de negócio  
+- Controllers apenas para camada HTTP  
+- Prisma isolado em módulo próprio  
+- DTOs para validação  
+- Relacionamentos modelados corretamente  
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
+
+## 🧠 Modelagem do Banco
+
+```text
+User 1 ─── N Workout
+Workout 1 ─── N WorkoutExercise
+Exercise 1 ─── N WorkoutExercise
+```
+
+A tabela `WorkoutExercise` resolve o relacionamento N:N entre treinos e exercícios, armazenando:
+
+- séries  
+- repetições  
+- peso  
+- status de conclusão  
+- comentários do usuário  
+
+---
+
+## ⚙️ Como rodar o projeto
+
+### 1️⃣ Clonar o repositório
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+git clone <repo-url>
+cd workout-manager-api
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+### 2️⃣ Criar o arquivo de ambiente
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+cp .env.example .env
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Ou manualmente:
 
-## Support
+```env
+DATABASE_URL="postgresql://postgres:postgres@postgres:5432/workout_manager?schema=public"
+JWT_SECRET="supersecretkey"
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+### 3️⃣ Subir a aplicação com Docker
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+docker-compose up --build
+```
 
-## License
+A API estará disponível em:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+http://localhost:3001
+```
+
+---
+
+## 🐳 O que o Docker faz automaticamente
+
+- Instala dependências  
+- Gera Prisma Client  
+- Executa migrations  
+- Build da aplicação  
+- Inicializa o servidor NestJS  
+
+Ambiente totalmente reprodutível.
+
+---
+
+## 🛠 Rodar comandos dentro do container (opcional)
+
+```bash
+docker exec -it workout_manager_app bash
+```
+
+---
+
+## 📦 Principais Endpoints
+
+### 👤 Usuários
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/users` | Criar usuário |
+| GET | `/users` | Listar usuários |
+| GET | `/users/:id` | Buscar usuário |
+| DELETE | `/users/:id` | Remover usuário |
+
+---
+
+### 🔐 Autenticação
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/auth/login` | Login do usuário |
+
+---
+
+### 🧠 Exercícios
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/exercises` | Criar exercício |
+| GET | `/exercises` | Listar exercícios |
+| GET | `/exercises/:id` | Buscar exercício |
+| PATCH | `/exercises/:id` | Atualizar exercício |
+| DELETE | `/exercises/:id` | Remover exercício |
+
+---
+
+### 🏋️ Treinos
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/workouts` | Criar treino |
+| GET | `/workouts` | Listar treinos do usuário |
+| GET | `/workouts/:id` | Buscar treino com exercícios |
+| DELETE | `/workouts/:id` | Remover treino |
+
+---
+
+### ➕ Exercícios dentro do Treino
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/workouts/:workoutId/exercises` | Adicionar exercício ao treino |
+| PATCH | `/workout-exercises/:id` | Atualizar séries, reps ou peso |
+| PATCH | `/workout-exercises/:id/complete` | Marcar exercício como concluído |
+| DELETE | `/workout-exercises/:id` | Remover exercício do treino |
+
+---
+
+## 🔐 Segurança
+
+- Senhas criptografadas com **bcrypt**  
+- Autenticação com **JWT**  
+- DTOs validados com **class-validator**  
+- Dados sensíveis não retornados nas respostas  
+
+---
+
+## 🧪 Futuras melhorias
+
+- Testes unitários  
+- Testes e2e  
+- Swagger para documentação automática  
+- Logs estruturados  
+- Deploy em cloud  
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
