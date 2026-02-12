@@ -204,6 +204,94 @@ docker exec -it workout_manager_app bash
 
 ---
 
+---
+
+## 🔐 Autenticação Moderna com JWT via Cookies
+
+A aplicação utiliza autenticação baseada em **JWT armazenado em cookies HTTP-only**, ao invés de enviar o token manualmente via header `Authorization`.
+
+Essa abordagem aumenta a segurança contra ataques XSS e segue práticas modernas utilizadas em aplicações web profissionais.
+
+### ⚙️ Como funciona
+
+Após o login, o backend:
+
+1. Gera o JWT
+2. Envia o token no **cookie da resposta**
+3. O navegador armazena automaticamente o cookie
+4. A cada requisição, o cookie é enviado automaticamente
+
+---
+
+### 🍪 Configuração do NestJS
+
+O projeto utiliza o middleware:
+
+```ts
+app.use(cookieParser());
+```
+
+---
+
+### 🧠 Estratégia JWT personalizada
+
+O token é extraído diretamente do cookie:
+
+```ts
+jwtFromRequest: ExtractJwt.fromExtractors([
+  (req: Request) => req?.cookies?.token,
+]),
+```
+
+Isso significa que o backend **não depende do header Authorization**, pois o token é lido automaticamente do cookie.
+
+---
+
+### 🔒 Vantagens dessa abordagem
+
+- Token não acessível via JavaScript (`HttpOnly`)
+- Proteção contra XSS
+- Fluxo automático no navegador
+- Melhor integração com aplicações web
+- Padrão utilizado em aplicações modernas
+
+---
+
+### 📌 Fluxo de autenticação
+
+```text
+Login → Backend gera JWT → Envia em cookie → Browser armazena → Requisições autenticadas automaticamente
+```
+
+---
+
+### 🛡️ Estrutura do payload validado
+
+```ts
+async validate(payload: UserPayload) {
+  return {
+    id: payload.sub,
+    email: payload.email,
+    name: payload.name,
+  };
+}
+```
+
+O usuário autenticado fica disponível no request através do `req.user`.
+
+---
+
+### 🚨 Importante
+
+Para que o cookie funcione corretamente em produção:
+
+- Definir `httpOnly: true`
+- Definir `secure: true` (HTTPS)
+- Definir `sameSite: 'strict'` ou `'lax'`
+- Configurar domínio corretamente
+
+---
+
 ## 🧪 Futuras melhorias
 
 - Testes unitários  
