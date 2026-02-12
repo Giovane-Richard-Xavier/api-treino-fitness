@@ -23,16 +23,6 @@ model Users {
   updatedAt DateTime   @updatedAt
 }
 
-model Exercises {
-  id               String            @id @default(uuid())
-  name             String
-  description      String?           @db.Text
-  muscleGroup      String
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  workoutExercises WorkoutExercise[]
-}
-
 model Workouts {
   id        String            @id @default(uuid())
   date      DateTime
@@ -41,6 +31,17 @@ model Workouts {
   exercises WorkoutExercise[]
   userId    String
   user      Users             @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Exercises {
+  id          String            @id @default(uuid())
+  name        String
+  muscleGroup String
+  description String?           @db.Text
+  workouts    WorkoutExercise[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,8 +57,13 @@ model WorkoutExercise {
   comment   String? @db.Text
 
   workoutId String
-  workout   Workouts @relation(fields: [workoutId], references: [id])
+  workout   Workouts @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 
   exerciseId String
   exercise   Exercises @relation(fields: [exerciseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workoutId, exerciseId])
 }
