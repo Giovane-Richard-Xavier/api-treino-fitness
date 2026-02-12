@@ -57,11 +57,30 @@ export class ExercisesService {
     return exercise;
   }
 
-  update(id: number, updateExerciseDto: UpdateExerciseDto) {
-    return `This action updates a #${id} exercise`;
+  async update(id: string, updateExerciseDto: UpdateExerciseDto) {
+    const exercise = await this.prisma.exercises.findUnique({ where: { id } });
+
+    if (!exercise) {
+      throw new NotFoundException(`Not found Exercise with ID: ${id}`);
+    }
+
+    const exerciseUpdated = await this.prisma.exercises.update({
+      where: { id },
+      data: updateExerciseDto,
+    });
+
+    return exerciseUpdated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} exercise`;
+  async remove(id: string) {
+    const exercise = await this.prisma.exercises.findUnique({ where: { id } });
+
+    if (!exercise) {
+      throw new NotFoundException(`Not found Exercise with ID: ${id}`);
+    }
+
+    await this.prisma.exercises.delete({ where: { id } });
+
+    return { message: 'Exercise removed successfully!' };
   }
 }
