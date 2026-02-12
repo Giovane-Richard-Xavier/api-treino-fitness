@@ -149,6 +149,7 @@ docker exec -it workout_manager_app bash
 | POST | `/users` | Criar usuário |
 | GET | `/users` | Listar usuários |
 | GET | `/users/:id` | Buscar usuário |
+| PATCH | `/users/:id` | Atualiza usuário |
 | DELETE | `/users/:id` | Remover usuário |
 
 ---
