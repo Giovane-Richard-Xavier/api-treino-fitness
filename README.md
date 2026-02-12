@@ -294,6 +294,8 @@ Para que o cookie funcione corretamente em produção:
 
 ## ⚙️ CI/CD com GitHub Actions
 
+<img width="982" height="363" alt="ci-cd" src="https://github.com/user-attachments/assets/553d4472-f658-414f-bd46-f5b02a4e249d" />
+
 O projeto possui integração contínua (CI) configurada através do **GitHub Actions**, garantindo que o código seja validado automaticamente a cada Pull Request.
 
 ### 🔄 O que é executado automaticamente
