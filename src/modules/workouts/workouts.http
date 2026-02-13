@@ -1,0 +1,37 @@
+@baseUrl = http://localhost:3001
+
+### Create Workout
+POST {{baseUrl}}/workouts
+Content-Type: application/json
+
+{
+  "userId": "b8c2b276-1df2-4644-9df3-a58a60523401",
+  "date": "2026-02-16T19:57:43.223Z",
+  "notes": "Treino A",
+  "status": "PENDING"
+}
+
+### Add Exercicios ao Workout
+POST {{baseUrl}}/workouts/2ee1c414-9f35-447f-ae31-601c7eef92bb/exercises
+Content-Type: application/json
+
+{
+  "exerciseId": "42fc5023-484a-4c44-83d5-3afbb15cf62b",
+  "sets": 4,
+  "reps": 12,
+  "weight": 10
+}
+
+### Gel All Workouts
+GET {{baseUrl}}/workouts?page=1&limit=10
+
+### Get workout by id
+GET {{baseUrl}}/workouts/2ee1c414-9f35-447f-ae31-601c7eef92bb
+
+### Update Workout 
+PATCH {{baseUrl}}/workout-exercises/b68ab1d7-d7bf-4c3f-907a-6f7b2c51b0d1
+Content-Type: application/json
+
+{
+  "notes": "Treino B"
+}

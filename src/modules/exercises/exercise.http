@@ -5,9 +5,9 @@ POST {{baseUrl}}/exercises
 Content-Type: application/json
 
 {
-  "name": "Supino Reto",
+  "name": "Crucifixo no Banco",
   "muscleGroup": "Peito",
-  "description": "O supino reto é um exercício de peito feito deitado em um banco, onde você empurra uma barra (ou halteres) para cima a partir do peito, focando em movimentos controlados para os músculos peitorais, tríceps e deltóides, com pés no chão, costas levemente arqueadas e escápulas fixas para estabilidade e segurança. "
+  "description": "O Crucifixo no Banco é um exercício de musculação para peitorais, feito deitado em banco reto, inclinado ou declinado, usando halteres ou máquina, com movimento de abraçar uma árvore para focar na contração e alongamento do peito, sem flexionar muito os cotovelos para não forçar os ombros, promovendo definição e força."
 }
 
 ### Get All Exercises

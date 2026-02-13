@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -40,13 +44,23 @@ export class WorkoutsService {
       throw new NotFoundException('Workout not found');
     }
 
-    return this.prisma.workoutExercise.create({
-      data: {
-        ...dto,
-        workoutId,
-      },
-      include: { exercise: true },
-    });
+    try {
+      return await this.prisma.workoutExercise.create({
+        data: {
+          ...dto,
+          workoutId,
+        },
+        include: { exercise: true },
+      });
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException(
+          'This exercise is already added to this workout',
+        );
+      }
+
+      throw error;
+    }
   }
 
   async completExercise(id: string, comment?: string) {
@@ -131,6 +145,16 @@ export class WorkoutsService {
       include: {
         user: {
           select: { name: true, email: true },
+        },
+        exercises: {
+          select: {
+            id: true,
+            sets: true,
+            reps: true,
+            weight: true,
+            completed: true,
+            comment: true,
+          },
         },
       },
     });
