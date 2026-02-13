@@ -19,7 +19,7 @@ Content-Type: application/json
   "exerciseId": "42fc5023-484a-4c44-83d5-3afbb15cf62b",
   "sets": 4,
   "reps": 12,
-  "weight": 10
+  "weight": 12
 }
 
 ### Gel All Workouts
