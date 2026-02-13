@@ -1,0 +1,29 @@
+@baseUrl = http://localhost:3001
+
+### Create Exercise
+POST {{baseUrl}}/exercises
+Content-Type: application/json
+
+{
+  "name": "Supino Reto",
+  "muscleGroup": "Peito",
+  "description": "O supino reto é um exercício de peito feito deitado em um banco, onde você empurra uma barra (ou halteres) para cima a partir do peito, focando em movimentos controlados para os músculos peitorais, tríceps e deltóides, com pés no chão, costas levemente arqueadas e escápulas fixas para estabilidade e segurança. "
+}
+
+### Get All Exercises
+GET {{baseUrl}}/exercises?page=1&limit=10
+
+### Get Exercise by id
+GET {{baseUrl}}/exercises/e7c91d68-e68d-455e-abaf-0fe6222f1350
+
+### Update Exercises
+PATCH {{baseUrl}}/exercises/e7c91d68-e68d-455e-abaf-0fe6222f1350
+Content-Type: application/json
+
+{
+  "name": "Cross over",
+  "muscleGroup": "Peito"
+}
+
+### Remove Exercise
+DELETE  {{baseUrl}}/exercises/e7c91d68-e68d-455e-abaf-0fe6222f1350

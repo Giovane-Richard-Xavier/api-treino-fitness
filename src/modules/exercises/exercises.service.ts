@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -73,11 +77,18 @@ export class ExercisesService {
   }
 
   async remove(id: string) {
-    const exercise = await this.prisma.exercises.findUnique({ where: { id } });
+    const exercise = await this.prisma.exercises.findUnique({
+      where: { id },
+    });
 
     if (!exercise) {
-      throw new NotFoundException(`Not found Exercise with ID: ${id}`);
+      throw new NotFoundException(`Not found exercise with ID: ${id}`);
     }
+
+    // Remove os relacionamentos (atenção!! -> apagará todos os exercicios que estão em todo os treinos)
+    await this.prisma.workoutExercise.deleteMany({
+      where: { exerciseId: id },
+    });
 
     await this.prisma.exercises.delete({ where: { id } });
 
