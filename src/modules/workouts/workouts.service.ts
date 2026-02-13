@@ -4,6 +4,7 @@ import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WorkoutStatus } from '@prisma/client';
 import { addExerciseToWorkoutDto } from './dto/add-exercise-workout.dto';
+import { UpdateWorkoutExerciseDto } from './dto/update-workout-exercise.dto';
 
 @Injectable()
 export class WorkoutsService {
@@ -31,6 +32,14 @@ export class WorkoutsService {
   }
 
   async addExercise(workoutId: string, dto: addExerciseToWorkoutDto) {
+    const workout = await this.prisma.workouts.findUnique({
+      where: { id: workoutId },
+    });
+
+    if (!workout) {
+      throw new NotFoundException('Workout not found');
+    }
+
     return this.prisma.workoutExercise.create({
       data: {
         ...dto,
@@ -58,6 +67,25 @@ export class WorkoutsService {
     }
 
     return updated;
+  }
+
+  // Atualizar séries, reps ou peso
+  async updateWorkoutExercise(
+    id: string,
+    updateWorkoutExerciseDto: UpdateWorkoutExerciseDto,
+  ) {
+    const exercise = await this.prisma.workoutExercise.findUnique({
+      where: { id },
+    });
+
+    if (!exercise) {
+      throw new NotFoundException('WorkoutExercise not found');
+    }
+
+    return this.prisma.workoutExercise.update({
+      where: { id },
+      data: updateWorkoutExerciseDto,
+    });
   }
 
   async getAllWorkout(

@@ -32,6 +32,22 @@ export class WorkoutsController {
     return this.workoutsService.addExercise(workoutId, addExerciseToWorkoutDto);
   }
 
+  @Patch(':workoutId/exercises')
+  completExercise(
+    @Param('workoutId', new ParseUUIDPipe()) workoutId: string,
+    @Body() addExerciseToWorkoutDto: addExerciseToWorkoutDto,
+  ) {
+    return this.workoutsService.addExercise(workoutId, addExerciseToWorkoutDto);
+  }
+
+  @Patch('workout-exercises/:workoutId')
+  updateWorkoutExercise(
+    @Param('workoutId', new ParseUUIDPipe()) workoutId: string,
+    @Body() addExerciseToWorkoutDto: addExerciseToWorkoutDto,
+  ) {
+    return this.workoutsService.addExercise(workoutId, addExerciseToWorkoutDto);
+  }
+
   @Get()
   getAllWorkout(
     @Query('page', new ParseIntPipe()) page = 1,
