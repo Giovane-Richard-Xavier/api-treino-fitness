@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y openssl bash
 WORKDIR /home/node/app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install -g @nestjs/cli
 
 COPY . .
 

@@ -1,0 +1,50 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { ExercisesService } from './exercises.service';
+import { CreateExerciseDto } from './dto/create-exercise.dto';
+import { UpdateExerciseDto } from './dto/update-exercise.dto';
+
+@Controller('exercises')
+export class ExercisesController {
+  constructor(private readonly exercisesService: ExercisesService) {}
+
+  @Post()
+  create(@Body() createExerciseDto: CreateExerciseDto) {
+    return this.exercisesService.create(createExerciseDto);
+  }
+
+  @Get()
+  getAllExercises(
+    @Query('page', new ParseIntPipe()) page = 1,
+    @Query('limit', new ParseIntPipe()) limit = 10,
+  ) {
+    return this.exercisesService.getAllExercises(page, limit);
+  }
+
+  @Get(':id')
+  getExerciseById(@Param('id') id: string) {
+    return this.exercisesService.getExerciseById(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateExerciseDto: UpdateExerciseDto,
+  ) {
+    return this.exercisesService.update(id, updateExerciseDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.exercisesService.remove(id);
+  }
+}

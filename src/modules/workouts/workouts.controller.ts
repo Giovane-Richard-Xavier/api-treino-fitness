@@ -8,10 +8,12 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { addExerciseToWorkoutDto } from './dto/add-exercise-workout.dto';
 
 @Controller('workouts')
 export class WorkoutsController {
@@ -20,6 +22,30 @@ export class WorkoutsController {
   @Post()
   create(@Body() createWorkoutDto: CreateWorkoutDto) {
     return this.workoutsService.create(createWorkoutDto);
+  }
+
+  @Post(':workoutId/exercises')
+  addExercise(
+    @Param('workoutId', new ParseUUIDPipe()) workoutId: string,
+    @Body() addExerciseToWorkoutDto: addExerciseToWorkoutDto,
+  ) {
+    return this.workoutsService.addExercise(workoutId, addExerciseToWorkoutDto);
+  }
+
+  @Patch(':workoutId/exercises')
+  completExercise(
+    @Param('workoutId', new ParseUUIDPipe()) workoutId: string,
+    @Body() addExerciseToWorkoutDto: addExerciseToWorkoutDto,
+  ) {
+    return this.workoutsService.addExercise(workoutId, addExerciseToWorkoutDto);
+  }
+
+  @Patch('workout-exercises/:workoutId')
+  updateWorkoutExercise(
+    @Param('workoutId', new ParseUUIDPipe()) workoutId: string,
+    @Body() addExerciseToWorkoutDto: addExerciseToWorkoutDto,
+  ) {
+    return this.workoutsService.addExercise(workoutId, addExerciseToWorkoutDto);
   }
 
   @Get()
@@ -32,7 +58,7 @@ export class WorkoutsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.workoutsService.findOne(+id);
+    return this.workoutsService.findOne(id);
   }
 
   @Patch(':id')
@@ -42,6 +68,6 @@ export class WorkoutsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.workoutsService.remove(+id);
+    return this.workoutsService.remove(id);
   }
 }

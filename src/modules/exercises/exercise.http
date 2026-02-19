@@ -1,0 +1,29 @@
+@baseUrl = http://localhost:3001
+
+### Create Exercise
+POST {{baseUrl}}/exercises
+Content-Type: application/json
+
+{
+  "name": "Crucifixo no Banco",
+  "muscleGroup": "Peito",
+  "description": "O Crucifixo no Banco é um exercício de musculação para peitorais, feito deitado em banco reto, inclinado ou declinado, usando halteres ou máquina, com movimento de abraçar uma árvore para focar na contração e alongamento do peito, sem flexionar muito os cotovelos para não forçar os ombros, promovendo definição e força."
+}
+
+### Get All Exercises
+GET {{baseUrl}}/exercises?page=1&limit=10
+
+### Get Exercise by id
+GET {{baseUrl}}/exercises/e7c91d68-e68d-455e-abaf-0fe6222f1350
+
+### Update Exercises
+PATCH {{baseUrl}}/exercises/e7c91d68-e68d-455e-abaf-0fe6222f1350
+Content-Type: application/json
+
+{
+  "name": "Cross over",
+  "muscleGroup": "Peito"
+}
+
+### Remove Exercise
+DELETE  {{baseUrl}}/exercises/e7c91d68-e68d-455e-abaf-0fe6222f1350
