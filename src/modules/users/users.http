@@ -26,7 +26,7 @@ Content-Type: application/json
 GET {{baseUrl}}/users?page=1&limit=10
 
 ### Get User By Id
-GET {{baseUrl}}/users/92a9a1ca-9418-443e-bb5b-086683310d0f
+GET {{baseUrl}}/users/b8c2b276-1df2-4644-9df3-a58a60523401
 
 ### Get User By Email
 PATCH  {{baseUrl}}/users/92a9a1ca-9418-443e-bb5b-086683310d0f

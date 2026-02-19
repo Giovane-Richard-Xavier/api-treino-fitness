@@ -29,7 +29,7 @@ GET {{baseUrl}}/workouts?page=1&limit=10
 GET {{baseUrl}}/workouts/2ee1c414-9f35-447f-ae31-601c7eef92bb
 
 ### Update Workout 
-PATCH {{baseUrl}}/workout-exercises/b68ab1d7-d7bf-4c3f-907a-6f7b2c51b0d1
+PATCH {{baseUrl}}/workout-exercises/2ee1c414-9f35-447f-ae31-601c7eef92bb
 Content-Type: application/json
 
 {
